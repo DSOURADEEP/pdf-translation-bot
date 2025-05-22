@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="chat-container history-container">
+    <h1>Translation History</h1>
+    
+    {% for chat in chats %}
+    <div class="message">
+        <strong>{{ chat.date_posted.strftime('%Y-%m-%d %H:%M') }}</strong><br>
+        Translated from {{ chat.original_language }}<br>
+        <a href="{{ url_for('download_file', filename=chat.translated_filename) }}" class="btn">Download PDF</a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

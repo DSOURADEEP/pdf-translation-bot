@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="chat-container">
+    <h1>PDF Translation Chat</h1>
+    <p>Upload a PDF to translate to English</p>
+    
+    <div class="chat-messages" id="chat-messages">
+        {% for chat in current_user.chats|reverse %}
+        <div class="message bot-message">
+            <strong>Translated from {{ chat.original_language }}</strong><br>
+            <a href="{{ url_for('download_file', filename=chat.translated_filename) }}" class="btn">Download PDF</a>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="upload-area">
+        <input type="file" id="file-input" accept=".pdf">
+        <label for="file-input">Choose PDF File</label>
+    </div>
+
+    <div id="processing" class="hidden">
+        <div class="spinner"></div>
+        <p>Processing your PDF...</p>
+    </div>
+</div>
+{% endblock %}

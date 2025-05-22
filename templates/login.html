@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="chat-container">
+    <h1>Login</h1>
+    <form method="POST">
+        <label for="username">Username</label>
+        <input type="text" id="username" name="username" required>
+        
+        <label for="password">Password</label>
+        <input type="password" id="password" name="password" required>
+        
+        <button type="submit" class="btn">Login</button>
+    </form>
+    <p>Don't have an account? <a href="{{ url_for('register') }}">Register</a></p>
+</div>
+{% endblock %}
