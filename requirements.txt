@@ -6,3 +6,4 @@ langdetect==1.0.9
 googletrans==4.0.0-rc1
 reportlab==4.0.4
 python-dotenv==0.19.0
+Werkzeug==2.2.3
