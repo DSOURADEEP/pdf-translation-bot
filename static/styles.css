@@ -3,6 +3,8 @@
     --dark: #0f172a;
     --light: #f8fafc;
     --gray: #94a3b8;
+    --success: #00c853;
+    --error: #ff1744;
 }
 
 body {
@@ -11,6 +13,7 @@ body {
     color: white;
     margin: 0;
     padding: 20px;
+    min-height: 100vh;
 }
 
 .container {
@@ -23,21 +26,29 @@ nav {
     padding: 10px;
     border-radius: 8px;
     margin-bottom: 20px;
+    display: flex;
+    gap: 15px;
 }
 
 nav a {
     color: white;
-    margin-right: 15px;
     text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.2s;
+}
+
+nav a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
 }
 
 .chat-container {
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 20px;
     display: flex;
     flex-direction: column;
     gap: 20px;
-    padding: 20px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 12px;
 }
 
 .chat-messages {
@@ -47,46 +58,48 @@ nav a {
     max-height: 60vh;
     overflow-y: auto;
     padding-right: 10px;
-    margin-bottom: 20px; /* Ensures space before upload-area */
 }
 
 .message {
-    padding: 12px;
-    margin: 0;
+    padding: 15px;
     border-radius: 8px;
     background-color: rgba(255, 255, 255, 0.05);
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Better visual separation */
 }
 
 .bot-message {
     background-color: rgba(0, 102, 255, 0.15);
+    border-left: 4px solid var(--primary);
+}
+
+.upload-options {
+    display: flex;
+    gap: 20px;
+    margin-top: 10px;
 }
 
 .upload-area {
+    flex: 1;
     border: 2px dashed var(--gray);
-    padding: 30px;
+    padding: 20px;
     text-align: center;
-    border-radius: 8px;
-    cursor: pointer;
-    margin-bottom: 30px;
-}
-
-#file-input {
-    position: absolute;
-    left: -9999px;
-}
-
-.upload-area label {
-    display: block;
-    padding: 15px;
-    background-color: rgba(0, 102, 255, 0.1);
     border-radius: 8px;
     cursor: pointer;
     transition: all 0.3s;
 }
 
-.upload-area label:hover {
-    background-color: rgba(0, 102, 255, 0.2);
+.upload-area:hover {
+    border-color: var(--primary);
+    background-color: rgba(0, 102, 255, 0.05);
+}
+
+#file-input, #batch-file-input {
+    display: none;
+}
+
+.upload-area label {
+    display: block;
+    padding: 15px;
+    cursor: pointer;
 }
 
 .btn {
@@ -96,13 +109,26 @@ nav a {
     padding: 10px 20px;
     border-radius: 8px;
     cursor: pointer;
+    text-decoration: none;
     display: inline-block;
     margin-top: 10px;
-    text-decoration: none;
+    transition: background-color 0.2s;
+}
+
+.btn:hover {
+    background-color: #0052cc;
 }
 
 .hidden {
     display: none;
+}
+
+#processing {
+    text-align: center;
+    padding: 20px;
+    background-color: rgba(0, 102, 255, 0.1);
+    border-radius: 8px;
+    margin-top: 20px;
 }
 
 .spinner {
@@ -112,14 +138,49 @@ nav a {
     width: 20px;
     height: 20px;
     animation: spin 1s linear infinite;
-    margin: 10px auto;
+    margin: 0 auto 10px;
+}
+
+.progress-container {
+    width: 100%;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+    margin-top: 15px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 8px;
+    background-color: var(--primary);
+    width: 0%;
+    transition: width 0.3s;
+}
+
+#batch-results {
+    margin-top: 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.result-item {
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+.result-success {
+    background-color: rgba(0, 200, 83, 0.1);
+    border-left: 4px solid var(--success);
+}
+
+.result-failed {
+    background-color: rgba(255, 23, 68, 0.1);
+    border-left: 4px solid var(--error);
 }
 
 .history-container .message {
     margin-bottom: 15px;
-    padding: 15px;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
 }
 
 /* Scrollbar styling */
@@ -139,4 +200,16 @@ nav a {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+    .upload-options {
+        flex-direction: column;
+    }
+    
+    nav {
+        flex-direction: column;
+        gap: 5px;
+    }
 }

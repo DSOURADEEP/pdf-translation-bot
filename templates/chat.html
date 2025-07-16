@@ -2,7 +2,7 @@
 {% block content %}
 <div class="chat-container">
     <h1>PDF Translation Chat</h1>
-    <p>Upload a PDF to translate to English</p>
+    <p>Upload single or multiple PDFs to translate to English</p>
     
     <div class="chat-messages" id="chat-messages">
         {% for chat in current_user.chats|reverse %}
@@ -12,15 +12,30 @@
         </div>
         {% endfor %}
     </div>
-
-    <div class="upload-area">
-        <input type="file" id="file-input" accept=".pdf">
-        <label for="file-input">Choose PDF File</label>
+    
+    <div class="upload-options">
+        <div class="upload-area single-upload">
+            <input type="file" id="file-input" accept=".pdf">
+            <label for="file-input">Choose Single PDF</label>
+        </div>
+        
+        <div class="upload-area batch-upload">
+            <input type="file" id="batch-file-input" accept=".pdf" multiple>
+            <label for="batch-file-input">Choose Multiple PDFs</label>
+        </div>
     </div>
-
+    
     <div id="processing" class="hidden">
         <div class="spinner"></div>
-        <p>Processing your PDF...</p>
+        <p>Processing <span id="file-count">0</span> files...</p>
+        <div class="progress-container">
+            <div class="progress-bar" id="progress-bar"></div>
+        </div>
+    </div>
+    
+    <div id="batch-results" class="hidden">
+        <h3>Batch Results</h3>
+        <div id="results-list"></div>
     </div>
 </div>
 {% endblock %}

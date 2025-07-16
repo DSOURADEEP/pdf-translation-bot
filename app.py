@@ -172,6 +172,57 @@ def chat():
     
     return render_template('chat.html')
 
+@app.route('/batch_upload', methods=['POST'])
+@login_required
+def batch_upload():
+    if 'files' not in request.files:
+        return jsonify({'error': 'No files uploaded'}), 400
+    
+    files = request.files.getlist('files')
+    if not files or all(file.filename == '' for file in files):
+        return jsonify({'error': 'No selected files'}), 400
+    
+    results = []
+    for file in files:
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+            file.save(filepath)
+            
+            text = extract_text_from_pdf(filepath)
+            if not text:
+                results.append({'filename': filename, 'status': 'failed', 'error': 'Text extraction failed'})
+                continue
+            
+            lang = detect_language(text)
+            if not lang or lang not in SUPPORTED_LANGUAGES:
+                results.append({'filename': filename, 'status': 'failed', 'error': 'Unsupported language'})
+                continue
+            
+            translated_text = translate_text(text, lang)
+            if not translated_text:
+                results.append({'filename': filename, 'status': 'failed', 'error': 'Translation failed'})
+                continue
+            
+            translated_filename = create_translated_pdf(translated_text, filename)
+            
+            chat = Chat(
+                original_language=SUPPORTED_LANGUAGES[lang],
+                translated_filename=translated_filename,
+                user_id=current_user.id
+            )
+            db.session.add(chat)
+            
+            results.append({
+                'filename': filename,
+                'status': 'success',
+                'original_language': SUPPORTED_LANGUAGES[lang],
+                'translated_filename': translated_filename
+            })
+    
+    db.session.commit()
+    return jsonify({'results': results})
+
 @app.route('/history')
 @login_required
 def history():
