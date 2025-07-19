@@ -1,11 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
-    // Single file upload
     const fileInput = document.getElementById('file-input');
     if (fileInput) {
         fileInput.addEventListener('change', handleSingleUpload);
     }
 
-    // Batch file upload
     const batchFileInput = document.getElementById('batch-file-input');
     if (batchFileInput) {
         batchFileInput.addEventListener('change', handleBatchUpload);
